@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Management System - Minhaj University Lahore</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==========================================
+         1. LOGIN PAGE
+         ========================================== -->
+    <section id="login-page" class="login-fullscreen-section active-page">
+        <div class="login-card-container">
+            <div class="login-card">
+                <div class="card-header">
+                    <div class="logo-circle">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h2>Campus Management System</h2>
+                    <p class="subtitle">Minhaj University Lahore</p>
+                </div>
+
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="email">Email address or Roll No</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="email" placeholder="2024f-mulug-0021 or email@mul.edu.pk" required>
+                        </div>
+                        <small class="error-msg" id="email-error"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="password" placeholder="••••••••" required>
+                            <i class="fa-solid fa-eye toggle-password" id="toggle-password" onclick="togglePasswordVisibility()"></i>
+                        </div>
+                        <small class="error-msg" id="password-error"></small>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-login">Sign in</button>
+                        <button type="button" class="btn btn-forgot" onclick="showPasswordReminder()">Forgot Password</button>
+                    </div>
+                </form>
+
+                <div class="first-time-info">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <p><strong>First-time logging in?</strong> Set any valid password with a valid email address (e.g., student@mul.edu.pk) to proceed into the portal.</p>
+                </div>
+
+                <div class="login-footer">
+                    <p>© 2026 - All Rights Reserved.</p>
+                    <p>Powered by: <strong>Minhaj University Lahore v1.0</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         2. MAIN APP LAYOUT
+         ========================================== -->
+    <div id="portal-app-layout" class="portal-container" style="display: none;">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Minhaj University Lahore</h2>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#courses" class="menu-item active" onclick="switchPage('courses')">
+                    <i class="fa-solid fa-book-open"></i> <span>Courses</span>
+                </a>
+                <a href="#schedule" class="menu-item" onclick="switchPage('schedule')">
+                    <i class="fa-solid fa-calendar-days"></i> <span>Lecture Schedule</span>
+                </a>
+                <a href="#profile" class="menu-item" onclick="switchPage('profile')">
+                    <i class="fa-solid fa-user-graduate"></i> <span>Profile</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN WRAPPER -->
+        <div class="main-wrapper">
+            
+            <header class="app-topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebarMenu()" title="Toggle Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <span class="topbar-brand">Minhaj University Lahore</span>
+                    <span class="topbar-divider">|</span>
+                    <span class="topbar-title" id="page-heading">Courses</span>
+                </div>
+                <div class="topbar-right">
+                    <button class="action-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="job-portal-badge" onclick="openJobsModal()">
+                        <i class="fa-solid fa-briefcase"></i> MUL Jobs Employment Portal
+                    </div>
+                    <button class="logout-btn" onclick="logout()" title="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main class="content-body">
+                
+                <!-- PAGE A: COURSES (PRIMARY MAIN DASHBOARD) -->
+                <section id="courses-page" class="portal-page active-page">
+                    <!-- Session Selector Bar -->
+                    <div class="session-selector-bar">
+                        <label for="session-select">Academic Session: </label>
+                        <select id="session-select" disabled>
+                            <option selected>Spring 2026</option>
+                        </select>
+                    </div>
+
+                    <!-- Course Detail Container (Hidden by default, shown when a course card is clicked) -->
+                    <div id="course-detail-wrapper" style="display: none;">
+                        <button class="back-arrow-btn" onclick="closeCourseDetails()">
+                            <i class="fa-solid fa-arrow-left"></i> Back to Courses List
+                        </button>
+
+                        <div class="course-header-blue-banner" id="course-header-banner">
+                            <h2 id="active-course-code">COMP234 - Information Security</h2>
+                            <div class="instructor-profile-row">
+                                <div class="avatar-circle-img" id="teacher-avatar-box">
+                                    <img id="teacher-avatar-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80" alt="Instructor">
+                                </div>
+                                <div class="instructor-details">
+                                    <h4 id="active-teacher-name">Faiqa Rasheed</h4>
+                                    <p id="active-teacher-email">Email : faiqarasheed.it@mul.edu.pk</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-tab-bar">
+                            <button class="c-tab-btn active" onclick="switchCourseTab(event, 'tab-info')">Information</button>
+                            <button class="c-tab-btn" onclick="switchCourseTab(event, 'tab-lesson')">Lesson Plan</button>
+                            <button class="c-tab-btn" onclick="switchCourseTab(event, 'tab-assignments')">Assignment</button>
+                        </div>
+
+                        <div id="tab-info" class="c-tab-content active">
+                            <div class="content-card">
+                                <h3>Course Information</h3>
+                                <div class="info-table">
+                                    <div class="info-row">
+                                        <span class="info-label">Course Title</span>
+                                        <span class="info-value" id="info-course-title">COMP234 - Information Security</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">Credit Hours</span>
+                                        <span class="info-value">3 (2 Theory , 1 Practical)</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">Department</span>
+                                        <span class="info-value">Faculty of Information Technology</span>
+                                    </div>
+                                </div>
+
+                                <hr class="section-divider">
+
+                                <h3>Introduction</h3>
+                                <p class="last-update-tag">Last Updated: Spring 2026 Session</p>
+                                <p class="course-description" id="info-course-desc">
+                                    This course introduces the fundamental principles and practices that protect digital data from unauthorized access, modification, or destruction. It covers encryption techniques, network security measures, and strategies employed to safeguard valuable information in today's interconnected world.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div id="tab-lesson" class="c-tab-content">
+                            <div class="content-card">
+                                <h3><i class="fa-solid fa-list-check"></i> Structured Lesson Plan & Modules</h3>
+                                <div class="lesson-cards-grid">
+                                    <div class="lesson-module-card">
+                                        <div class="module-number">Week 01 - 03</div>
+                                        <h4>Module 1: Foundations & Core Concepts</h4>
+                                        <p>Overview of system architecture, security goals (CIA Triad), threat modeling, and introductory lab environments setup.</p>
+                                    </div>
+                                    <div class="lesson-module-card">
+                                        <div class="module-number">Week 04 - 07</div>
+                                        <h4>Module 2: Practical Engineering & Analysis</h4>
+                                        <p>In-depth hands-on operations, network protocol evaluation, system logs analysis, and practical lab assignments.</p>
+                                    </div>
+                                    <div class="lesson-module-card">
+                                        <div class="module-number">Week 08 - 12</div>
+                                        <h4>Module 3: Advanced Applications & Audit</h4>
+                                        <p>Security policies, vulnerability assessment, defense mechanisms, and final semester project execution.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tab-assignments" class="c-tab-content">
+                            <div class="content-card">
+                                <h3>Assignment Submission Portal</h3>
+                                <form onsubmit="handleAssignmentUpload(event)">
+                                    <div class="file-drop-zone">
+                                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                        <label for="assignment-file" class="file-label">Click to select Assignment Document</label>
+                                        <input type="file" id="assignment-file" required onchange="showFileName(this)">
+                                        <p id="selected-file-name">No file chosen</p>
+                                    </div>
+                                    <button type="submit" class="btn btn-login" style="margin-top: 1rem;">Upload Document</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Primary Course Grid View -->
+                    <div id="courses-grid-wrapper">
+                        <h2 class="page-title">Registered Courses (Spring 2026)</h2>
+
+                        <div class="dashboard-grid">
+                            <div class="courses-column">
+                                
+                                <!-- Course 1 -->
+                                <div class="mul-course-card" onclick="openCourseDetails('COMP234', 'Information Security', 'Faiqa Rasheed', 'faiqarasheed.it@mul.edu.pk', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80')">
+                                    <div class="card-left-banner banner-blue">
+                                        <span class="course-code-badge">COMP234</span>
+                                        <i class="fa-solid fa-shield-halved banner-icon"></i>
+                                    </div>
+                                    <div class="card-right-content">
+                                        <h3>Information Security</h3>
+                                        <div class="card-badges">
+                                            <span class="meta-badge red"><i class="fa-solid fa-book"></i> 4</span>
+                                            <span class="meta-badge blue"><i class="fa-solid fa-bell"></i> 3</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 2 -->
+                                <div class="mul-course-card" onclick="openCourseDetails('COMP236', 'Computer Organization & Assembly Language', 'Dr. Arslan', 'arslan@mul.edu.pk', 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80')">
+                                    <div class="card-left-banner banner-green">
+                                        <span class="course-code-badge">COMP236</span>
+                                        <i class="fa-solid fa-microchip banner-icon"></i>
+                                    </div>
+                                    <div class="card-right-content">
+                                        <h3>Computer Organization & Assembly Language</h3>
+                                        <div class="card-badges">
+                                            <span class="meta-badge red"><i class="fa-solid fa-book"></i> 3</span>
+                                            <span class="meta-badge blue"><i class="fa-solid fa-bell"></i> 6</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 3 -->
+                                <div class="mul-course-card" onclick="openCourseDetails('ITEC206', 'Virtual System and Services', 'M. Ali Khan', 'ali.khan@mul.edu.pk', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80')">
+                                    <div class="card-left-banner banner-purple">
+                                        <span class="course-code-badge">ITEC206</span>
+                                        <i class="fa-solid fa-server banner-icon"></i>
+                                    </div>
+                                    <div class="card-right-content">
+                                        <h3>Virtual System and Services</h3>
+                                        <div class="card-badges">
+                                            <span class="meta-badge red"><i class="fa-solid fa-book"></i> 3</span>
+                                            <span class="meta-badge blue"><i class="fa-solid fa-bell"></i> 2</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 4 -->
+                                <div class="mul-course-card" onclick="openCourseDetails('COMP336', 'Web Technologies & Frameworks', 'Prof. Usman', 'usman.it@mul.edu.pk', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80')">
+                                    <div class="card-left-banner banner-amber">
+                                        <span class="course-code-badge">COMP336</span>
+                                        <i class="fa-solid fa-code banner-icon"></i>
+                                    </div>
+                                    <div class="card-right-content">
+                                        <h3>Web Technologies & Frameworks</h3>
+                                        <div class="card-badges">
+                                            <span class="meta-badge red"><i class="fa-solid fa-book"></i> 4</span>
+                                            <span class="meta-badge blue"><i class="fa-solid fa-bell"></i> 5</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 5 -->
+                                <div class="mul-course-card" onclick="openCourseDetails('DB201', 'Database Management Systems', 'Dr. Ayesha Malik', 'ayesha.malik@mul.edu.pk', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80')">
+                                    <div class="card-left-banner banner-teal">
+                                        <span class="course-code-badge">DB201</span>
+                                        <i class="fa-solid fa-database banner-icon"></i>
+                                    </div>
+                                    <div class="card-right-content">
+                                        <h3>Database Management Systems</h3>
+                                        <div class="card-badges">
+                                            <span class="meta-badge red"><i class="fa-solid fa-book"></i> 4</span>
+                                            <span class="meta-badge blue"><i class="fa-solid fa-bell"></i> 4</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 6 -->
+                                <div class="mul-course-card" onclick="openCourseDetails('SE302', 'Software Engineering Principles', 'Engr. Sadia Noor', 'sadia.noor@mul.edu.pk', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80')">
+                                    <div class="card-left-banner banner-rose">
+                                        <span class="course-code-badge">SE302</span>
+                                        <i class="fa-solid fa-diagram-project banner-icon"></i>
+                                    </div>
+                                    <div class="card-right-content">
+                                        <h3>Software Engineering Principles</h3>
+                                        <div class="card-badges">
+                                            <span class="meta-badge red"><i class="fa-solid fa-book"></i> 3</span>
+                                            <span class="meta-badge blue"><i class="fa-solid fa-bell"></i> 1</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 7 -->
+                                <div class="mul-course-card" onclick="openCourseDetails('NET104', 'Data Communication & Networks', 'Prof. Tariq Mahmood', 'tariq.m@mul.edu.pk', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80')">
+                                    <div class="card-left-banner banner-indigo">
+                                        <span class="course-code-badge">NET104</span>
+                                        <i class="fa-solid fa-network-wired banner-icon"></i>
+                                    </div>
+                                    <div class="card-right-content">
+                                        <h3>Data Communication & Networks</h3>
+                                        <div class="card-badges">
+                                            <span class="meta-badge red"><i class="fa-solid fa-book"></i> 3</span>
+                                            <span class="meta-badge blue"><i class="fa-solid fa-bell"></i> 2</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- News Column -->
+                            <div class="news-column">
+                                <div class="news-card">
+                                    <h3><i class="fa-solid fa-bullhorn"></i> News & Events</h3>
+                                    <div class="news-item">
+                                        <p><strong>Midterm Examination Schedule</strong></p>
+                                        <small>Published: Spring 2026 Session</small>
+                                    </div>
+                                    <div class="news-item">
+                                        <p><strong>Annual IT Seminar & Tech Expo</strong></p>
+                                        <small>Minhaj University Main Auditorium</small>
+                                    </div>
+                                    <div class="news-item">
+                                        <p><strong>Cybersecurity Workshop 2026</strong></p>
+                                        <small>Lab 4 - Registration Open</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PAGE B: LECTURE SCHEDULE -->
+                <section id="schedule-page" class="portal-page">
+                    <div class="schedule-wrapper-bg">
+                        <h2 class="page-title">Lecture Schedule Timetable</h2>
+                        
+                        <div class="day-tabs">
+                            <button class="day-tab active" onclick="showScheduleDay('monday', this)">Monday</button>
+                            <button class="day-tab" onclick="showScheduleDay('tuesday', this)">Tuesday</button>
+                            <button class="day-tab" onclick="showScheduleDay('wednesday', this)">Wednesday</button>
+                            <button class="day-tab" onclick="showScheduleDay('thursday', this)">Thursday</button>
+                            <button class="day-tab" onclick="showScheduleDay('friday', this)">Friday</button>
+                        </div>
+
+                        <div class="schedule-container">
+                            <div id="schedule-monday" class="day-schedule-content active">
+                                <div class="timetable-card">
+                                    <span class="time-slot">08:30 AM - 10:30 AM</span>
+                                    <h4>ITEC206 - Virtual System and Services</h4>
+                                    <p><i class="fa-solid fa-location-dot"></i> Room 6307-6309 | Teacher: M. Ali Khan</p>
+                                </div>
+                                <div class="timetable-card alt-color">
+                                    <span class="time-slot">10:30 AM - 12:00 PM</span>
+                                    <h4>COMP336 - Web Technologies</h4>
+                                    <p><i class="fa-solid fa-laptop-code"></i> Lab 4 (IT Block) | Teacher: Prof. Usman</p>
+                                </div>
+                            </div>
+
+                            <div id="schedule-tuesday" class="day-schedule-content">
+                                <div class="timetable-card">
+                                    <span class="time-slot">09:00 AM - 11:00 AM</span>
+                                    <h4>COMP234 - Information Security</h4>
+                                    <p><i class="fa-solid fa-location-dot"></i> Room 6202 | Teacher: Faiqa Rasheed</p>
+                                </div>
+                                <div class="timetable-card alt-color">
+                                    <span class="time-slot">11:30 AM - 01:00 PM</span>
+                                    <h4>COMP236 - Computer Organization & Assembly</h4>
+                                    <p><i class="fa-solid fa-microchip"></i> Lab 2 | Teacher: Dr. Arslan</p>
+                                </div>
+                            </div>
+
+                            <div id="schedule-wednesday" class="day-schedule-content">
+                                <div class="timetable-card">
+                                    <span class="time-slot">08:30 AM - 10:30 AM</span>
+                                    <h4>DB201 - Database Management Systems</h4>
+                                    <p><i class="fa-solid fa-database"></i> Lab 1 | Teacher: Dr. Ayesha Malik</p>
+                                </div>
+                            </div>
+
+                            <div id="schedule-thursday" class="day-schedule-content">
+                                <div class="timetable-card">
+                                    <span class="time-slot">10:00 AM - 12:00 PM</span>
+                                    <h4>COMP234 - Information Security (Practical)</h4>
+                                    <p><i class="fa-solid fa-shield-halved"></i> Cyber Lab | Teacher: Faiqa Rasheed</p>
+                                </div>
+                                <div class="timetable-card alt-color">
+                                    <span class="time-slot">01:00 PM - 02:30 PM</span>
+                                    <h4>SE302 - Software Engineering Principles</h4>
+                                    <p><i class="fa-solid fa-diagram-project"></i> Room 4102 | Teacher: Engr. Sadia Noor</p>
+                                </div>
+                            </div>
+
+                            <div id="schedule-friday" class="day-schedule-content">
+                                <div class="timetable-card alt-color">
+                                    <span class="time-slot">08:30 AM - 11:30 AM</span>
+                                    <h4>NET104 - Data Communication & Networks</h4>
+                                    <p><i class="fa-solid fa-network-wired"></i> Networks Lab | Teacher: Prof. Tariq Mahmood</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PAGE C: PROFILE -->
+                <section id="profile-page" class="portal-page">
+                    <div class="content-card max-500 center-block">
+                        <div class="profile-avatar-container">
+                            <!-- Points to your local image profile.jpg -->
+                            <img src="./profile.jpg" alt="Student Profile" class="profile-img-element" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80';">
+                        </div>
+                        <h2 style="text-align: center;">Quratulain</h2>
+                        <p style="text-align: center; margin-bottom: 1.5rem;"><span class="meta-badge blue">2024F-mulug-0021</span></p>
+
+                        <div class="profile-details-list">
+                            <div class="p-row"><span>Registration No:</span> <strong>2024F-mulug-0021</strong></div>
+                            <div class="p-row"><span>Degree Program:</span> <strong>BS Information Technology</strong></div>
+                            <div class="p-row"><span>Current Semester:</span> <strong>4th Semester (Spring 2026)</strong></div>
+                            <div class="p-row"><span>University:</span> <strong>Minhaj University Lahore</strong></div>
+                            <div class="p-row"><span>Status:</span> <strong>Regular Active Student</strong></div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         3. JOBS MODAL
+         ========================================== -->
+    <div id="jobs-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-briefcase"></i> MUL Jobs & Student Employment Portal</h3>
+                <button class="close-modal-btn" onclick="closeJobsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-intro">Explore active internship programs and part-time campus job opportunities for students:</p>
+                
+                <div class="jobs-list">
+                    <div class="job-item-card" onclick="toggleJobDetails('job-1')">
+                        <div class="job-item-header">
+                            <div>
+                                <h4>IT Support & Network Assistant (Internship)</h4>
+                                <span class="job-tag green">Part-Time</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div id="job-1" class="job-details-expand" style="display: none;">
+                            <p><strong>Department:</strong> MUL IT Infrastructure Division</p>
+                            <p><strong>Timing:</strong> Morning Shift (09:00 AM - 01:00 PM)</p>
+                            <p><strong>Stipend:</strong> PKR 15,000 / month</p>
+                            <p><strong>Eligibility:</strong> BS IT / BS CS 3rd Semester onwards with basic networking knowledge.</p>
+                        </div>
+                    </div>
+
+                    <div class="job-item-card" onclick="toggleJobDetails('job-2')">
+                        <div class="job-item-header">
+                            <div>
+                                <h4>Junior Web Developer Trainee</h4>
+                                <span class="job-tag blue">Internship</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div id="job-2" class="job-details-expand" style="display: none;">
+                            <p><strong>Department:</strong> Software Development Cell</p>
+                            <p><strong>Timing:</strong> Afternoon Shift (01:30 PM - 05:00 PM)</p>
+                            <p><strong>Stipend:</strong> PKR 18,000 / month</p>
+                            <p><strong>Eligibility:</strong> Proficiency in HTML, CSS, JavaScript, and Bootstrap.</p>
+                        </div>
+                    </div>
+
+                    <div class="job-item-card" onclick="toggleJobDetails('job-3')">
+                        <div class="job-item-header">
+                            <div>
+                                <h4>Student Peer Tutor (Computer Logic)</h4>
+                                <span class="job-tag purple">Campus Job</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div id="job-3" class="job-details-expand" style="display: none;">
+                            <p><strong>Department:</strong> Student Academic Support Center</p>
+                            <p><strong>Timing:</strong> Flexible (2 Hours/day)</p>
+                            <p><strong>Stipend:</strong> PKR 12,000 / month</p>
+                            <p><strong>Eligibility:</strong> Minimum CGPA 3.3 in technical logic subjects.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-apply-notice">
+                    <i class="fa-solid fa-building-user"></i>
+                    <div>
+                        <strong>How to Apply:</strong>
+                        <p>To register or submit your application for any of the positions above, please visit the <strong>Student Placement & Admin Office (Block B, Room 104)</strong> with your updated CV and Student ID Card.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

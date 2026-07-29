@@ -1,0 +1,725 @@
+/* ==========================================================================
+   GLOBAL VARIABLES & BASE THEME
+   ========================================================================== */
+:root {
+    --bg-main: #f1f5f9;
+    --bg-card: #ffffff;
+    
+    --sidebar-bg: #1e293b;
+    --sidebar-text: #94a3b8;
+    --sidebar-active: #3b82f6;
+    --sidebar-active-text: #ffffff;
+    
+    --topbar-bg: #ffffff;
+    --banner-blue: #2563eb;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;
+    
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s ease;
+}
+
+[data-theme="dark"] {
+    --bg-main: #0f172a;
+    --bg-card: #1e293b;
+    --sidebar-bg: #0b0f19;
+    --sidebar-text: #cbd5e1;
+    --sidebar-active: #2563eb;
+    --sidebar-active-text: #ffffff;
+    --topbar-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   1. LOGIN PAGE (LOCAL CLEAR BACKGROUND IMAGE)
+   ========================================================================== */
+.login-fullscreen-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    /* Uses local background image with realistic crisp contrast overlay */
+    background-image: linear-gradient(rgba(15, 23, 42, 0.25), rgba(15, 23, 42, 0.25)), url('./mul-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-fullscreen-section.active-page {
+    display: flex;
+}
+
+.login-card-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 450px;
+    padding: 1rem;
+}
+
+.login-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 2.5rem 2rem 1.5rem;
+    box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.logo-circle {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: #eff6ff;
+    border: 2px solid #bfdbfe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.8rem;
+    font-size: 1.8rem;
+    color: #1d4ed8;
+}
+
+.card-header h2 {
+    font-size: 1.25rem;
+    color: #0f172a;
+}
+
+.card-header .subtitle {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--banner-blue);
+    background: #fff;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 35%;
+    cursor: pointer;
+    color: #64748b;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-login { background-color: #10b981; color: #ffffff; flex: 1; }
+.btn-login:hover { background-color: #059669; }
+.btn-forgot { background-color: #f59e0b; color: #ffffff; flex: 1; }
+
+.first-time-info {
+    margin-top: 1.2rem;
+    padding: 0.75rem;
+    background-color: #f0f9ff;
+    border-left: 4px solid #0284c7;
+    border-radius: 4px;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: 0.8rem;
+    color: #0369a1;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 0.8rem;
+}
+
+.error-msg { color: #dc2626; font-size: 0.8rem; display: block; margin-top: 0.2rem; }
+
+/* ==========================================================================
+   2. APP LAYOUT & SIDEBAR STYLING
+   ========================================================================== */
+.portal-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-header h2 {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    gap: 0.3rem;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 1.2rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+    border-left: 4px solid transparent;
+}
+
+.menu-item:hover {
+    background-color: rgba(255,255,255,0.05);
+    color: #ffffff;
+}
+
+.menu-item.active {
+    background-color: var(--sidebar-active);
+    color: var(--sidebar-active-text);
+    border-left-color: #60a5fa;
+    font-weight: 600;
+}
+
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.app-topbar {
+    height: 60px;
+    background-color: var(--topbar-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-main);
+    cursor: pointer;
+    padding: 0.3rem;
+    margin-right: 0.4rem;
+}
+
+.topbar-brand { font-weight: 700; font-size: 1rem; color: var(--text-main); }
+.topbar-divider { color: var(--text-muted); opacity: 0.5; }
+.topbar-title { font-weight: 500; font-size: 0.95rem; color: var(--text-muted); }
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.job-portal-badge {
+    background-color: #ef4444;
+    color: #fff;
+    padding: 0.45rem 0.9rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.job-portal-badge:hover { background-color: #dc2626; }
+
+.action-btn, .logout-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 0.45rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-main);
+}
+
+.content-body {
+    padding: 1.8rem;
+    flex: 1;
+}
+
+.portal-page { display: none; }
+.portal-page.active-page { display: block; }
+.page-title { font-size: 1.4rem; margin-bottom: 1.5rem; color: var(--text-main); }
+
+/* ==========================================================================
+   3. COURSES & CARDS STYLING
+   ========================================================================== */
+.session-selector-bar {
+    margin-bottom: 1.5rem;
+}
+
+.session-selector-bar select {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: 4px;
+    cursor: not-allowed;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 1.5rem;
+}
+
+.mul-course-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    display: flex;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.mul-course-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+.card-left-banner {
+    width: 170px;
+    padding: 1.5rem 1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.banner-green { background: linear-gradient(135deg, #10b981, #047857); }
+.banner-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+.banner-amber { background: linear-gradient(135deg, #f59e0b, #b45309); }
+.banner-teal { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+.banner-rose { background: linear-gradient(135deg, #f43f5e, #be123c); }
+.banner-indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+
+.course-code-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+.banner-icon { font-size: 2.3rem; color: #fff; }
+
+.card-right-content {
+    padding: 1.2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-right-content h3 { font-size: 1.05rem; }
+.card-badges { display: flex; gap: 0.5rem; }
+.meta-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.78rem; }
+.meta-badge.red { background: #fee2e2; color: #991b1b; }
+.meta-badge.blue { background: #e0f2fe; color: #075985; }
+
+.news-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 1.2rem;
+    border-radius: 6px;
+}
+
+.news-card h3 { font-size: 1.1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+
+.news-item {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   4. SCHEDULE BACKGROUND STYLING
+   ========================================================================== */
+.schedule-wrapper-bg {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 1.8rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.day-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.day-tab {
+    padding: 0.55rem 1.2rem;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.day-tab.active {
+    background: var(--banner-blue);
+    color: #fff;
+    border-color: var(--banner-blue);
+}
+
+.day-schedule-content { display: none; }
+.day-schedule-content.active { display: block; }
+
+.timetable-card {
+    background: var(--bg-main);
+    border-left: 5px solid #3b82f6;
+    padding: 1.2rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.timetable-card.alt-color { border-left-color: #10b981; }
+.time-slot { font-weight: bold; color: var(--banner-blue); font-size: 0.85rem; }
+
+/* ==========================================================================
+   5. COURSE DETAILS & INSTRUCTOR AVATAR STYLING
+   ========================================================================== */
+.back-arrow-btn {
+    background: none;
+    border: none;
+    color: var(--banner-blue);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.course-header-blue-banner {
+    background: var(--banner-blue);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+}
+
+.instructor-profile-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+.avatar-circle-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #cbd5e1;
+}
+
+.avatar-circle-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course-tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+
+.c-tab-btn {
+    padding: 0.8rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.c-tab-btn.active {
+    color: var(--banner-blue);
+    border-bottom-color: var(--banner-blue);
+}
+
+.c-tab-content { display: none; }
+.c-tab-content.active { display: block; }
+
+.content-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: 6px;
+}
+
+.info-table { margin-top: 1rem; }
+.info-row {
+    display: flex;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.info-label { width: 180px; font-weight: 600; }
+
+.lesson-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+}
+
+.lesson-module-card {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    padding: 1.2rem;
+    border-radius: 6px;
+}
+
+.module-number {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--banner-blue);
+    margin-bottom: 0.4rem;
+}
+
+.file-drop-zone {
+    border: 2px dashed var(--border-color);
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    border-radius: 6px;
+}
+
+.file-drop-zone input[type="file"] {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+}
+
+.upload-icon { font-size: 2.5rem; color: var(--banner-blue); margin-bottom: 0.5rem; }
+
+/* ==========================================================================
+   6. PROFILE & JOBS MODAL
+   ========================================================================== */
+.max-500 { max-width: 500px; }
+.center-block { margin: 0 auto; }
+
+.profile-avatar-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    overflow: hidden;
+    border: 3px solid var(--banner-blue);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.profile-img-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.p-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: #1e293b;
+    color: #fff;
+    padding: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-body { padding: 1.5rem; }
+.modal-intro { margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted); }
+
+.job-item-card {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+}
+
+.job-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.job-tag {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-weight: bold;
+}
+.job-tag.green { background: #dcfce7; color: #15803d; }
+.job-tag.blue { background: #dbeafe; color: #1e40af; }
+.job-tag.purple { background: #f3e8ff; color: #6b21a8; }
+
+.job-details-expand {
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed var(--border-color);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.admin-apply-notice {
+    margin-top: 1.2rem;
+    padding: 1rem;
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 4px;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    font-size: 0.85rem;
+    color: #78350f;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100vh;
+    }
+    .sidebar.mobile-open { left: 0; }
+}
